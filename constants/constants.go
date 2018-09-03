@@ -1,9 +1,10 @@
 package constants
 
 const (
-	HOST     = "localhost"
-	PORT     = 1900
-	USER     = "postgres"
-	PASSWORD = "pa33word"
-	DbName   = "simplewebapp"
+	PG_HOST     = "localhost"
+	PG_PORT     = 1900
+	PG_USER     = "postgres"
+	PG_PASSWORD = "pa33word"
+	PG_DbName   = "simplewebapp"
+	SERVER_PORT = 1988
 )

@@ -2,14 +2,17 @@ package main
 
 import (
 	"log"
-	"simple-web-app/dbstorage"
+	"simple-web-app/constants"
+	"simple-web-app/dbstorage/postgres"
+	"simple-web-app/http"
 )
 
 func main() {
 	log.Printf("Simple-Web-Application is running...")
-	log.Printf("Simple-Web-Application is shutting down...")
+
+	http.StartServer(constants.SERVER_PORT)
 }
 
 func init() {
-	dbstorage.MigrateDbSchema()
+	postgres.MigrateDbSchema()
 }

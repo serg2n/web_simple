@@ -1,27 +1,27 @@
-package dbstorage
+package postgres
 
 import (
 	"database/sql"
 	"fmt"
 	"github.com/DavidHuie/gomigrate"
+	_ "github.com/lib/pq"
 	"log"
 	"simple-web-app/constants"
-	_ "github.com/lib/pq"
 )
 
 var dbConnection *sql.DB = nil
 
-func DbConnection() (*sql.DB) {
+func DbConnection() *sql.DB {
 	if dbConnection == nil {
 		dbConnection = createDbConnection()
 	}
 	return dbConnection
 }
 
-func createDbConnection() (*sql.DB) {
+func createDbConnection() *sql.DB {
 	psqlInfo := fmt.Sprintf("host=%s port=%d user=%s "+
 		"password=%s dbname=%s sslmode=disable",
-		constants.HOST, constants.PORT, constants.USER, constants.PASSWORD, constants.DbName)
+		constants.PG_HOST, constants.PG_PORT, constants.PG_USER, constants.PG_PASSWORD, constants.PG_DbName)
 
 	log.Printf("Connecting to database: %s", psqlInfo)
 

@@ -1,4 +1,4 @@
-package dbstorage
+package postgres
 
 import (
 	"database/sql"
@@ -8,7 +8,6 @@ import (
 type ContactService struct {
 	DB *sql.DB
 }
-
 
 //ContactService implementation
 func (ContactService) Contact(id int) (*simplewebapp.Contact, error) {
@@ -30,5 +29,3 @@ func (ContactService) UpdateContact(c *simplewebapp.Contact) (*simplewebapp.Cont
 func (ContactService) DeleteContact(id int) (*simplewebapp.Contact, error) {
 	panic("implement me")
 }
-
-
