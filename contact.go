@@ -1,4 +1,4 @@
-package simple_web_app
+package simplewebapp
 
 type Contact struct {
 	ID        int
