@@ -38,7 +38,7 @@ func (r *RegexpResolver) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	http.NotFound(res, req)
 }
 
-func GetIdFromRequest(req *http.Request, level int) (int32, error) {
+func IdFromRequest(req *http.Request, level int) (int, error) {
 	path := req.URL.Path
 	parts := strings.Split(path, "/")
 	id := ""
@@ -50,7 +50,7 @@ func GetIdFromRequest(req *http.Request, level int) (int32, error) {
 	log.Printf("Extracted id from url: %s, %s", path, id)
 
 	res, err := strconv.ParseInt(id, 10, 32)
-	return int32(res), err
+	return int(res), err
 }
 
 func InternalServerErrorResponse(w http.ResponseWriter) {

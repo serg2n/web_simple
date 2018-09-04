@@ -22,8 +22,22 @@ const (
 
 //ContactService implementation
 func (cs *ContactServiceImpl) Contact(id int) (*simplewebapp.Contact, error) {
-	log.Printf("'Contact' method invoked.")
-	return nil, nil
+	log.Printf("Get Contact by ID: %d", id)
+
+	contact := new(simplewebapp.Contact)
+
+	err := cs.DB.QueryRow(contactSql, id).Scan(&contact.ID, &contact.FirstName, &contact.LastName, &contact.Phone,
+		&contact.Email)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			log.Printf("No contact found with id = %d", id)
+			return nil, nil
+		}
+		log.Printf("Cannot get contact by id %d, error: %v", id, err)
+		return nil, errors.New(fmt.Sprintf("Cannot get Contact with id %d from the storage: %v",
+			id, err))
+	}
+	return contact, nil
 }
 
 func (cs *ContactServiceImpl) Contacts(pageSize int, offset int) ([]*simplewebapp.Contact, error) {

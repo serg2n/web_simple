@@ -14,8 +14,36 @@ type ContactController struct {
 }
 
 func (cc *ContactController) Contact(res http.ResponseWriter, req *http.Request) {
+	id, err := IdFromRequest(req, 2)
+	if err != nil {
+		log.Printf("Cannot get ID from the url: %s, %v", req.URL.Path, err)
+		BadRequestResponse(res)
+		return
+	}
+
+	contact, err := cc.ContactService.Contact(id)
+	if err != nil {
+		InternalServerErrorResponse(res)
+		return
+	}
+	if contact == nil {
+		log.Printf("Contact not found: %d", id)
+		http.NotFound(res, req)
+		return
+	}
+
+	resultContact, err := json.Marshal(contact)
+	if err != nil {
+		log.Printf("Cannot get contact by id %d, error: %v", id, err)
+		return
+	}
 	res.Header().Set("content-type", "application/json")
-	res.Write([]byte("{ \"result\":\"OK\"}"))
+	_, err = res.Write(resultContact)
+	if err != nil {
+		log.Printf("Cannot write data to HTTP response: %v", err)
+		InternalServerErrorResponse(res)
+	}
+
 }
 
 func (cc *ContactController) CreateContact(res http.ResponseWriter, req *http.Request) {
@@ -55,7 +83,7 @@ func (cc *ContactController) Contacts(res http.ResponseWriter, req *http.Request
 
 	_, err = res.Write(resultData)
 	if err != nil {
-		log.Printf("Cannot writer data to HTTP response: %v", err)
+		log.Printf("Cannot write data to HTTP response: %v", err)
 		InternalServerErrorResponse(res)
 	}
 
