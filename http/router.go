@@ -9,7 +9,7 @@ func (r *Router) configureRouting(resolver *RegexpResolver) {
 	resolver.Add("POST /contact/?$", r.cc.CreateContact)
 	resolver.Add("GET /contact/([0-9]+)/?$", r.cc.Contact)
 	resolver.Add("PUT /contact/([0-9]+)/?$", r.cc.UpdateContact)
-	//resolver.Add("DELETE /contact/([0-9]+)/?$", DeleteContact)
+	resolver.Add("DELETE /contact/([0-9]+)/?$", r.cc.DeleteContact)
 }
 
 func NewRouter(contactController *ContactController) *Router {

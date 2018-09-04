@@ -17,7 +17,7 @@ const (
 	contactSql       = "SELECT * FROM contacts WHERE id = $1"
 	createContactSql = "INSERT INTO contacts(id, first_name, last_name, phone, email) VALUES ($1, $2, $3, $4, $5)"
 	updateContactSql = "UPDATE contacts SET first_name = $1, last_name = $2, phone = $3, email = $4 WHERE id = $5"
-	delectContactSql = "DELETE FROM contacts WHERE id = $1"
+	deleteContactSql = "DELETE FROM contacts WHERE id = $1"
 )
 
 //ContactService implementation
@@ -118,7 +118,39 @@ func (cs *ContactServiceImpl) UpdateContact(contact *simplewebapp.Contact) (*sim
 }
 
 func (cs *ContactServiceImpl) DeleteContact(id int) (*simplewebapp.Contact, error) {
-	panic("implement me")
+	contact2Delete, err := cs.Contact(id)
+	if err != nil {
+		msg := fmt.Sprintf("Cannot delete contact %d : %v", id, err)
+		log.Printf(msg)
+		if err == sql.ErrNoRows {
+			log.Printf("No contact found with id = %d", id)
+			return nil, nil
+		}
+		return nil, errors.New(msg)
+	}
+
+	stmt, err := cs.DB.Prepare(deleteContactSql)
+
+	if err != nil {
+		msg := fmt.Sprintf("Cannot delete contact %d : %v", id, err)
+		log.Printf(msg)
+		return nil, errors.New(msg)
+	}
+
+	result, err := stmt.Exec(id)
+
+	if err != nil {
+		msg := fmt.Sprintf("Cannot delete contact %d : %v", id, err)
+		log.Printf(msg)
+		return nil, errors.New(msg)
+	}
+
+	rowCnt, _ := result.RowsAffected()
+	if rowCnt > 0 {
+		log.Printf("Contact %d deleted, %d rows affected", id, rowCnt)
+	}
+
+	return contact2Delete, nil
 }
 
 func NewContactServiceImpl(db *sql.DB) simplewebapp.ContactService {

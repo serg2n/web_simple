@@ -156,8 +156,35 @@ func (cc *ContactController) UpdateContact(res http.ResponseWriter, req *http.Re
 }
 
 func (cc *ContactController) DeleteContact(res http.ResponseWriter, req *http.Request) {
+	id, err := IdFromRequest(req, 2)
+	if err != nil {
+		log.Printf("Cannot get Id from the url: %s, %v", req.URL.Path, err)
+		BadRequestResponse(res)
+		return
+	}
+	log.Printf("Delete Contact %d", id)
+
+	deletedContact, err := cc.ContactService.DeleteContact(id)
+	if err != nil {
+		InternalServerErrorResponse(res)
+		return
+	}
+	if deletedContact == nil {
+		http.NotFound(res, req)
+		return
+	}
+
+	resultContact, err := json.Marshal(deletedContact)
+	if err != nil {
+		log.Printf("Cannot return deleted Contact %d", id)
+	}
+
 	res.Header().Set("content-type", "application/json")
-	res.Write([]byte("{ \"result\":\"OK\"}"))
+	_, err = res.Write(resultContact)
+
+	if err != nil {
+		log.Printf("Can not write data to response: %v", err)
+	}
 }
 
 func NewContactController(cs simplewebapp.ContactService) *ContactController {
