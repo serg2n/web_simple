@@ -113,8 +113,46 @@ func (cc *ContactController) Contacts(res http.ResponseWriter, req *http.Request
 }
 
 func (cc *ContactController) UpdateContact(res http.ResponseWriter, req *http.Request) {
+
+	id, err := IdFromRequest(req, 2)
+	if err != nil {
+		log.Printf("Can not get Id from the url: %s, %v", req.URL.Path, err)
+		log.Printf("Contact Id must be specified for Contact Update")
+		BadRequestResponse(res)
+		return
+	}
+
+	log.Printf("Update Contact %d", id)
+	contactToUpdate := new(simplewebapp.Contact)
+	if err := json.NewDecoder(req.Body).Decode(contactToUpdate); err != nil {
+		log.Printf("Error updating Contact: %v", err)
+	}
+	contactToUpdate.Id = id
+
+	contactToUpdate, err, updatedCount := cc.ContactService.UpdateContact(contactToUpdate)
+	if err != nil {
+		InternalServerErrorResponse(res)
+		return
+	}
+	if updatedCount < 1 {
+		log.Printf("Contact not found for update: %d", id)
+		http.NotFound(res, req)
+		return
+	}
+
+	data, err := json.Marshal(contactToUpdate)
+	if err != nil {
+		log.Printf("Can not marshall data: %v", err)
+		InternalServerErrorResponse(res)
+		return
+	}
+
 	res.Header().Set("content-type", "application/json")
-	res.Write([]byte("{ \"result\":\"OK\"}"))
+	_, err = res.Write(data)
+	if err != nil {
+		log.Printf("Can not write data to response: %v", err)
+		InternalServerErrorResponse(res)
+	}
 }
 
 func (cc *ContactController) DeleteContact(res http.ResponseWriter, req *http.Request) {

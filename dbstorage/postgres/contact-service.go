@@ -16,7 +16,7 @@ const (
 	contactsListSql  = "SELECT * FROM contacts LIMIT $1 OFFSET $2"
 	contactSql       = "SELECT * FROM contacts WHERE id = $1"
 	createContactSql = "INSERT INTO contacts(id, first_name, last_name, phone, email) VALUES ($1, $2, $3, $4, $5)"
-	updateContactSql = "UPDATE contacts SET first_name = $1, last_name = $2, phone = $3, email = $4"
+	updateContactSql = "UPDATE contacts SET first_name = $1, last_name = $2, phone = $3, email = $4 WHERE id = $5"
 	delectContactSql = "DELETE FROM contacts WHERE id = $1"
 )
 
@@ -96,8 +96,25 @@ func (cs *ContactServiceImpl) CreateContact(newContact *simplewebapp.Contact) (*
 	return newContact, nil
 }
 
-func (cs *ContactServiceImpl) UpdateContact(c *simplewebapp.Contact) (*simplewebapp.Contact, error) {
-	panic("implement me")
+func (cs *ContactServiceImpl) UpdateContact(contact *simplewebapp.Contact) (*simplewebapp.Contact, error, int) {
+	stmt, err := cs.DB.Prepare(updateContactSql)
+	if err != nil {
+		msg := fmt.Sprintf("Cannot update Contact: %v", err)
+		log.Printf(msg)
+		return nil, errors.New(msg), 0
+	}
+
+	result, err := stmt.Exec(contact.FirstName, contact.LastName, contact.Phone, contact.Email, contact.Id)
+	if err != nil {
+		msg := fmt.Sprintf("Cannot update Contact: %v", err)
+		log.Printf(msg)
+		return nil, errors.New(msg), 0
+	}
+	rowCnt, _ := result.RowsAffected()
+
+	log.Printf("Contact updated, %d rows affected", rowCnt)
+
+	return contact, nil, int(rowCnt)
 }
 
 func (cs *ContactServiceImpl) DeleteContact(id int) (*simplewebapp.Contact, error) {
