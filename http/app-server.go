@@ -4,11 +4,18 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"simple-web-app/dbstorage/postgres"
 )
 
 func StartServer(port int) {
+
+	//Dependency Injection
+	cs := postgres.NewContactServiceImpl(postgres.DbConnection())
+	cc := NewContactController(cs)
+	router := NewRouter(cc)
 	pr := NewPathResolver()
-	configureRouting(pr)
+	router.configureRouting(pr)
+
 	log.Printf("Starting server : localhost:%d", port)
 
 	log.Fatal(
