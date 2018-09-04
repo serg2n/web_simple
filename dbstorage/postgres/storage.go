@@ -38,13 +38,10 @@ func createDbConnection() *sql.DB {
 	return db
 }
 
-func NextSeqVal() (int32, error) {
-	var seqVal int32
+func NextSeqVal() (int, error) {
+	seqVal := -1
 	err := DbConnection().QueryRow("SELECT nextval('seq')").Scan(&seqVal)
-	if err != nil {
-		return -1, nil
-	}
-	return seqVal, nil
+	return seqVal, err
 }
 
 func MigrateDbSchema() {

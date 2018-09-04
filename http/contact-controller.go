@@ -47,9 +47,32 @@ func (cc *ContactController) Contact(res http.ResponseWriter, req *http.Request)
 }
 
 func (cc *ContactController) CreateContact(res http.ResponseWriter, req *http.Request) {
+	log.Printf("Create a new Contact...")
+	newContact := new(simplewebapp.Contact)
+
+	if err := json.NewDecoder(req.Body).Decode(newContact); err != nil {
+		log.Printf("Error creating a new Contact: %v", err)
+	}
+
+	newContact, err := cc.ContactService.CreateContact(newContact)
+
+	if err != nil {
+		InternalServerErrorResponse(res)
+		return
+	}
+
+	data, err := json.Marshal(newContact)
+	if err != nil {
+		log.Printf("Cannot marshal data: %v", err)
+		InternalServerErrorResponse(res)
+		return
+	}
 	res.Header().Set("content-type", "application/json")
-	res.Write([]byte("{ \"result\":\"OK\"}"))
-	//ContactSer
+	_, err = res.Write(data)
+	if err != nil {
+		log.Printf("Cannot write data to response:%v", err)
+		InternalServerErrorResponse(res)
+	}
 }
 
 func (cc *ContactController) Contacts(res http.ResponseWriter, req *http.Request) {
@@ -89,7 +112,6 @@ func (cc *ContactController) Contacts(res http.ResponseWriter, req *http.Request
 
 }
 
-
 func (cc *ContactController) UpdateContact(res http.ResponseWriter, req *http.Request) {
 	res.Header().Set("content-type", "application/json")
 	res.Write([]byte("{ \"result\":\"OK\"}"))
@@ -100,13 +122,13 @@ func (cc *ContactController) DeleteContact(res http.ResponseWriter, req *http.Re
 	res.Write([]byte("{ \"result\":\"OK\"}"))
 }
 
-func NewContactController(cs simplewebapp.ContactService) (*ContactController) {
+func NewContactController(cs simplewebapp.ContactService) *ContactController {
 	return &ContactController{
 		ContactService: cs,
 	}
 }
 
-func convertHttpParam2Int(srcStr string, defVal int) (int) {
+func convertHttpParam2Int(srcStr string, defVal int) int {
 	res, err := strconv.Atoi(srcStr)
 	if err != nil {
 		log.Printf("Cannot convert http param %s to int: %v, using default value %d", srcStr, err, defVal)

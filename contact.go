@@ -1,7 +1,7 @@
 package simplewebapp
 
 type Contact struct {
-	ID        int
+	Id        int
 	FirstName string
 	LastName  string
 	Phone     string
@@ -11,7 +11,7 @@ type Contact struct {
 type ContactService interface {
 	Contact(id int) (*Contact, error)
 	Contacts(pageSize int, offset int) ([]*Contact, error)
-	CreateContact(c *Contact) (*Contact, error)
-	UpdateContact(c *Contact) (*Contact, error)
+	CreateContact(newContact *Contact) (*Contact, error)
+	UpdateContact(contact *Contact) (*Contact, error)
 	DeleteContact(id int) (*Contact, error)
 }
