@@ -12,7 +12,8 @@ func StartServer(port int) {
 	//Dependency Injection
 	cs := postgres.NewContactServiceImpl(postgres.DbConnection())
 	cc := NewContactController(cs)
-	router := NewRouter(cc)
+	ic := NewIndexController()
+	router := NewRouter(cc, ic)
 	pr := NewPathResolver()
 	router.configureRouting(pr)
 
