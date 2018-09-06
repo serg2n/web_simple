@@ -80,15 +80,15 @@ func (cc *ContactController) Contacts(res http.ResponseWriter, req *http.Request
 	pageSizeStr := query.Get("pageSize")
 	var pageSize, offset int
 	if pageSizeStr == "" {
-		pageSize = constants.PageSize
+		pageSize = constants.PAGE_SIZE
 	} else {
-		pageSize = convertHttpParam2Int(pageSizeStr, constants.PageSize)
+		pageSize = convertHttpParam2Int(pageSizeStr, constants.PAGE_SIZE)
 	}
 	offsetStr := query.Get("offset")
 	if offsetStr == "" {
-		offset = constants.Offset
+		offset = constants.OFFSET
 	} else {
-		offset = convertHttpParam2Int(offsetStr, constants.Offset)
+		offset = convertHttpParam2Int(offsetStr, constants.OFFSET)
 	}
 
 	resultContacts, err := cc.ContactService.Contacts(pageSize, offset)

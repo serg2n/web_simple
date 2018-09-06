@@ -1,13 +1,19 @@
 package http
 
+import (
+	"net/http"
+	"simple-web-app/constants"
+)
+
 type Router struct {
 	cc *ContactController
-	ic *IndexController
 }
 
 func (r *Router) configureRouting(resolver *RegexpResolver) {
 
-	resolver.Add("GET /", r.ic.indexHandler)
+	resolver.AddFileHandler("GET /js", http.Dir(constants.ASSETS_PATH))
+
+	resolver.Add("GET /$", IndexHandler)
 
 	resolver.Add("GET /contact/?$", r.cc.Contacts)
 	resolver.Add("POST /contact/?$", r.cc.CreateContact)
@@ -16,7 +22,7 @@ func (r *Router) configureRouting(resolver *RegexpResolver) {
 	resolver.Add("DELETE /contact/([0-9]+)/?$", r.cc.DeleteContact)
 }
 
-func NewRouter(contactController *ContactController, indexController *IndexController) *Router {
+func NewRouter(contactController *ContactController) *Router {
 	return &Router{
 		cc: contactController,
 	}

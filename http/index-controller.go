@@ -6,15 +6,7 @@ import (
 	"simple-web-app/ui"
 )
 
-type IndexController struct {
-
-}
-
-func (ic *IndexController) indexHandler(res http.ResponseWriter, req *http.Request) {
+func  IndexHandler(res http.ResponseWriter, req *http.Request) {
 	fmt.Fprintf(res, ui.IndexHTML)
 }
 
-func NewIndexController() *IndexController {
-	return &IndexController{
-	}
-}
