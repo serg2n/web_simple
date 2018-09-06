@@ -10,13 +10,18 @@ import (
 
 type RegexpResolver struct {
 	handlers map[string]http.HandlerFunc
+	fileHandler map[string]http.Handler
+
 	cache    map[string]*regexp.Regexp
+	fileHandlerCache map[string]*regexp.Regexp
 }
 
 func NewPathResolver() *RegexpResolver {
 	return &RegexpResolver{
 		handlers: make(map[string]http.HandlerFunc),
+		fileHandler: make(map[string]http.Handler),
 		cache:    make(map[string]*regexp.Regexp),
+		fileHandlerCache: make(map[string]*regexp.Regexp),
 	}
 }
 
@@ -26,8 +31,23 @@ func (r *RegexpResolver) Add(regex string, handler http.HandlerFunc) {
 	r.cache[regex] = cache
 }
 
+func (r *RegexpResolver) AddFileHandler(regex string, root http.FileSystem) {
+	r.fileHandler[regex] = http.FileServer(root)
+	cache, _ := regexp.Compile(regex)
+	r.fileHandlerCache[regex] = cache
+
+}
+
 func (r *RegexpResolver) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 	check := req.Method + " " + req.URL.Path
+
+	for pattern, handler := range r.fileHandler {
+		if r.fileHandlerCache[pattern].MatchString(check) == true {
+			handler.ServeHTTP(res, req)
+			return
+		}
+	}
+
 	for pattern, handlerFunc := range r.handlers {
 		if r.cache[pattern].MatchString(check) == true {
 			handlerFunc(res, req)

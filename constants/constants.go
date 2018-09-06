@@ -7,6 +7,8 @@ const (
 	PG_PASSWORD = "pa33word"
 	PG_DbName   = "simplewebapp"
 	SERVER_PORT = 1988
-	PageSize    = 15
-	Offset      = 0
+	CLIENT_PORT = 1989
+	PAGE_SIZE    = 15
+	OFFSET      = 0
+	ASSETS_PATH = "assets"
 )
