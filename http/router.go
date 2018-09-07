@@ -11,9 +11,10 @@ type Router struct {
 
 func (r *Router) configureRouting(resolver *RegexpResolver) {
 
+	resolver.AddFileHandler("GET /$", http.Dir(constants.ASSETS_PATH))
 	resolver.AddFileHandler("GET /js", http.Dir(constants.ASSETS_PATH))
 
-	resolver.Add("GET /$", IndexHandler)
+	//resolver.Add("GET /$", IndexHandler)
 
 	resolver.Add("GET /contact/?$", r.cc.Contacts)
 	resolver.Add("POST /contact/?$", r.cc.CreateContact)
