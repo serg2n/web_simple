@@ -1,11 +1,12 @@
 
 $(document).ready(function () {
     $("#contactsTable").DataTable({
-        // "processing" :true,
-        // "serverSide": true,
+        "paging": true,
         "ajax": {
             "url" : "contact/",
+            "type": "GET",
             "dataType": "json",
+            "contentType": 'application/json; charset=utf-8',
             "dataSrc": ""
         },
         columns: [
