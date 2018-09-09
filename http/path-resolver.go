@@ -55,6 +55,7 @@ func (r *RegexpResolver) ServeHTTP(res http.ResponseWriter, req *http.Request) {
 		}
 	}
 
+	log.Printf("%s handler not found", check)
 	http.NotFound(res, req)
 }
 
