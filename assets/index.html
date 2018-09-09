@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Contacts List</title>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <link rel="stylesheet" type="text/css" href="js/datatables.min.css"/>
+    <script type="text/javascript" src="js/datatables.min.js"></script>
+    <script type="text/javascript" src="js/bootbox.min.js"></script>
+
+    <script src="js/app.js"></script>
+
+</head>
+
+<body>
+<div class="container-fluid">
+    <h2>List Of Contacts</h2>
+    <div class="row">
+        <div class="col">
+            <table id="contactsTable" class="table table-bordered">
+                <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>First Name</th>
+                    <th>Last Name</th>
+                    <th>Phone</th>
+                    <th>Email</th>
+                    <th>Edit</th>
+                    <th>Remove</th>
+                </tr>
+                </thead>
+            </table>
+        </div>
+    </div>
+
+    <button type="button" class="btn" onclick="showAddNewContactModal()">Add a New Record</button>
+
+    <!--Modal 'Add New Record'-->
+    <div class="modal fade" id="addNewContactModal">
+        <div class="modal-dialog">
+            <div class="modal-content">
+
+                <!-- Modal Header -->
+                <div class="modal-header">
+                    <h4 class="modal-title">Add a New Contact:</h4>
+                    <button type="button" class="close" data-dismiss="modal">&times;</button>
+                </div>
+
+                <!-- Modal body -->
+                <div class="modal-body">
+                    <div class="form-group">
+                        <label for="firstName">First Name:</label>
+                        <input type="text" class="form-control" id="firstName">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastName">Last Name:</label>
+                        <input type="text" class="form-control" id="lastName">
+                    </div>
+                    <div class="form-group">
+                        <label for="phone">Phone:</label>
+                        <input type="text" class="form-control" id="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email:</label>
+                        <input type="email" class="form-control" id="email">
+                    </div>
+
+                </div>
+
+                <!-- Modal footer -->
+                <div class="modal-footer">
+                    <button id="createContactBtn" type="button" class="btn btn-primary" onclick="saveContact()">Save</button>
+                    <button id="updateContactBtn" type="button" class="btn btn-primary" onclick="updateContact()" >Update</button>
+                    <button type="button" class="btn btn-basic" data-dismiss="modal">Cancel</button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+
+
+</html>
