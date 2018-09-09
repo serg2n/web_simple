@@ -1,6 +1,6 @@
 
 $(document).ready(function () {
-    $("#contactsTable").DataTable({
+    var contactsTable = $("#contactsTable").DataTable({
         "paging": true,
         "ajax": {
             "url" : "contact/",
@@ -10,20 +10,41 @@ $(document).ready(function () {
             "dataSrc": ""
         }
         ,
-        columns: [
+        "columns": [
             {data: "Id"},
             {data: "FirstName"},
             {data: "LastName"},
             {data: "Phone"},
-            {data: "Email"},
+            {data: "Email"}
+        ]
+        ,
+        "columnDefs": [
             {
-                "data": null,
-                "defaultContent": "<button>Edit</button>"
+                "targets" : [0],
+                "visible" : false,
+                "searchable": false
             },
             {
+                "targets" : [5],
                 "data": null,
-                "defaultContent": "<button>Remove</button>"
+                "defaultContent": "<button id='editBtn'>Edit</button>"
+            },
+            {
+                "targets" : [6],
+                "data": null,
+                "defaultContent": "<button id='remBtn'>Remove</button>"
             }
         ]
+    });
+
+    $("#contactsTable tbody").on('click', '#editBtn', function () {
+        var data = contactsTable.row( $(this).parents('tr') ).data();
+        alert('Clicked on Edit ' + data["Id"]);
+    });
+
+    $("#contactsTable tbody").on('click', '#remBtn', function () {
+        var data = contactsTable.row( $(this).parents('tr') ).data();
+
+        alert('Clicked on Remove ' + data["Id"]);
     });
 });
