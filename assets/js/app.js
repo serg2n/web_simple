@@ -38,13 +38,23 @@ $(document).ready(function () {
     });
 
     $("#contactsTable tbody").on('click', '#editBtn', function () {
-        var data = contactsTable.row( $(this).parents('tr') ).data();
-        alert('Clicked on Edit ' + data["Id"]);
+        var id2Edit = contactsTable.row( $(this).parents('tr') ).data()["Id"];
     });
 
     $("#contactsTable tbody").on('click', '#remBtn', function () {
-        var data = contactsTable.row( $(this).parents('tr') ).data();
+        var id2Remove = contactsTable.row( $(this).parents('tr') ).data()["Id"];
 
-        alert('Clicked on Remove ' + data["Id"]);
+        $.ajax({
+            url: "contact/" + id2Remove,
+            type: "DELETE",
+            success: function (data) {
+                contactsTable.ajax.reload();
+
+            },
+            error: function (data) {
+                alert("Error while removing the record. Please check the logs.");
+            }
+
+        });
     });
 });
