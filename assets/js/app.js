@@ -1,9 +1,8 @@
-
 $(document).ready(function () {
     var contactsTable = $("#contactsTable").DataTable({
         "paging": true,
         "ajax": {
-            "url" : "contact/",
+            "url": "contact/",
             "type": "GET",
             "dataType": "json",
             "contentType": 'application/json; charset=utf-8',
@@ -20,17 +19,17 @@ $(document).ready(function () {
         ,
         "columnDefs": [
             {
-                "targets" : [0],
-                "visible" : false,
+                "targets": [0],
+                "visible": false,
                 "searchable": false
             },
             {
-                "targets" : [5],
+                "targets": [5],
                 "data": null,
                 "defaultContent": "<button id='editBtn'>Edit</button>"
             },
             {
-                "targets" : [6],
+                "targets": [6],
                 "data": null,
                 "defaultContent": "<button id='remBtn'>Remove</button>"
             }
@@ -38,23 +37,27 @@ $(document).ready(function () {
     });
 
     $("#contactsTable tbody").on('click', '#editBtn', function () {
-        var id2Edit = contactsTable.row( $(this).parents('tr') ).data()["Id"];
+        var id2Edit = contactsTable.row($(this).parents('tr')).data()["Id"];
     });
 
     $("#contactsTable tbody").on('click', '#remBtn', function () {
-        var id2Remove = contactsTable.row( $(this).parents('tr') ).data()["Id"];
+        var id2Remove = contactsTable.row($(this).parents('tr')).data()["Id"];
 
-        $.ajax({
-            url: "contact/" + id2Remove,
-            type: "DELETE",
-            success: function (data) {
-                contactsTable.ajax.reload();
+        bootbox.confirm("Delete the record?", function (result) {
+            if (result === true) {
+                $.ajax({
+                    url: "contact/" + id2Remove,
+                    type: "DELETE",
+                    success: function (data) {
+                        contactsTable.ajax.reload();
 
-            },
-            error: function (data) {
-                alert("Error while removing the record. Please check the logs.");
+                    },
+                    error: function (data) {
+                        alert("Error while removing the record. Please check the logs.");
+                    }
+
+                });
             }
-
         });
     });
 });
