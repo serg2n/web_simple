@@ -77,14 +77,14 @@ func (cc *ContactController) CreateContact(res http.ResponseWriter, req *http.Re
 
 func (cc *ContactController) Contacts(res http.ResponseWriter, req *http.Request) {
 	query := req.URL.Query()
-	pageSizeStr := query.Get("pageSize")
+	pageSizeStr := query.Get("length")
 	var pageSize, offset int
 	if pageSizeStr == "" {
 		pageSize = constants.PAGE_SIZE
 	} else {
 		pageSize = convertHttpParam2Int(pageSizeStr, constants.PAGE_SIZE)
 	}
-	offsetStr := query.Get("offset")
+	offsetStr := query.Get("start")
 	if offsetStr == "" {
 		offset = constants.OFFSET
 	} else {
