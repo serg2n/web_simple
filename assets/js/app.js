@@ -50,7 +50,6 @@ $(document).ready(function () {
                     type: "DELETE",
                     success: function (data) {
                         contactsTable.ajax.reload();
-
                     },
                     error: function (data) {
                         alert("Error while removing the record. Please check the logs.");
@@ -61,3 +60,40 @@ $(document).ready(function () {
         });
     });
 });
+
+function showAddNewContactModal() {
+    clearNewContactInputs();
+    $("#addNewContactModal").modal('show');
+}
+
+function saveNewContact() {
+    var newContact = {
+        FirstName: $("#firstName").val().trim(),
+        LastName: $("#lastName").val().trim(),
+        Phone: $("#phone").val().trim(),
+        Email: $("#email").val().trim()
+    };
+
+    $.ajax({
+        url: "contact/",
+        type: "POST",
+        dataType: "json",
+        contentType: "application/json",
+        data : JSON.stringify(newContact),
+        success: function(data) {
+            $("#addNewContactModal").modal('hide');
+            $("#contactsTable").DataTable().ajax.reload();
+            clearNewContactInputs();
+        },
+        error: function(data) {
+            bootbox.alert("Error when creating a new contact. Please check the logs.");
+        }
+    });
+}
+
+function clearNewContactInputs() {
+    $("#firstName").val('');
+    $("#lastName").val('');
+    $("#phone").val('');
+    $("#email").val('');
+}
