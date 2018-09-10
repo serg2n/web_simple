@@ -1,0 +1,12 @@
+simplewebapp:
+  build:
+    .
+  ports:
+    - "1988:1988"
+  links:
+    - dbstorage
+
+dbstorage:
+  image: postgres
+  environment:
+    - "POSTGRES_PASSWORD=pa33word"

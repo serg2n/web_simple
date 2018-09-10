@@ -46,7 +46,7 @@ func NextSeqVal() (int, error) {
 
 func MigrateDbSchema() {
 	db := DbConnection()
-	migrator, err := gomigrate.NewMigrator(db, gomigrate.Postgres{}, "./dbstorage/migrations/")
+	migrator, err := gomigrate.NewMigrator(db, gomigrate.Postgres{}, "./dbstorage/postgres/migrations/")
 	if err != nil {
 		log.Fatalf("Can not migrate db schema: %v", err)
 	}
