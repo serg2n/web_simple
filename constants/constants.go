@@ -5,7 +5,7 @@ const (
 	PG_PORT     = 5432
 	PG_USER     = "postgres"
 	PG_PASSWORD = "pa33word"
-	PG_DbName   = "simplewebapp"
+	PG_DbName   = "postgres"
 	SERVER_PORT = 1988
 	PAGE_SIZE    = 15
 	OFFSET      = 0

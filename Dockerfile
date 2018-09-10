@@ -9,7 +9,5 @@ RUN go get github.com/DavidHuie/gomigrate
 RUN go get github.com/lib/pq
 RUN go build ./cmd/simple-web-app/main.go
 
-#EXPOSE 1988
-
 USER simplewebapp
 CMD ["./main"]
