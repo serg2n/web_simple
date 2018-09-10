@@ -16,10 +16,10 @@ func StartServer(port int) {
 	pr := NewPathResolver()
 	router.configureRouting(pr)
 
-	log.Printf("Starting server : localhost:%d", port)
+	log.Printf("Starting server : 0.0.0.0:%d", port)
 
 	log.Fatal(
 		http.ListenAndServe(
-			fmt.Sprintf("localhost:%d", port),
+			fmt.Sprintf("0.0.0.0:%d", port),
 			pr))
 }
